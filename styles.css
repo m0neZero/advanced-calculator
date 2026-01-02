@@ -1,119 +1,157 @@
+:root {
+    --bg-color: #121212;         /* Фон страницы */
+    --calc-bg: #1e272e;          /* Фон калькулятора */
+    --display-bg: #000000;       /* Фон экрана */
+    --text-white: #ffffff;
+    --text-gray: #a5a5a5;
+    
+    /* Цвета кнопок */
+    --btn-num-bg: #2d3436;       /* Цифры */
+    --btn-op-bg: #ff9f43;        /* Операторы (+ - * /) */
+    --btn-sci-bg: #0984e3;       /* Научные (sin, cos) */
+    --btn-action-bg: #d63031;    /* C, Backspace */
+    
+    --btn-radius: 12px;          /* Закругление кнопок */
+}
+
 * {
     box-sizing: border-box;
-    margin: 0;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
-    background: linear-gradient(to right, #0f2027, #203a43, #0b9ad8);
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
 
+/* --- Контейнер калькулятора --- */
 .calculator {
-    position: relative;
+    background-color: var(--calc-bg);
     padding: 20px;
-    max-width: 400px;
-    margin: 0 auto;
-    border: solid 1px rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    margin-top: 50px;
-    overflow: hidden;
-    color: #ffffff;
-    background-color: #0f1720;
-    background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.03), transparent 15%),
-        linear-gradient(120deg, #0f2027 0%, #2c5364 35%, #203a43 65%, #0f2027 100%);
-    background-blend-mode: screen, normal;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    width: 340px;
+    transition: all 0.3s ease; /* Плавная анимация при изменении размера */
 }
 
-.calculator::before {
-    content: "";
-    position: absolute;
-    top: -30%;
-    left: -30%;
-    width: 160%;
-    height: 160%;
-    background: linear-gradient(60deg, rgba(255, 0, 150, 0.12), rgba(0, 200, 255, 0.12), rgba(0, 255, 150, 0.12), rgba(255, 210, 0, 0.12));
-    background-size: 400% 400%;
-    filter: blur(50px);
-    z-index: 0;
-    animation: gradientShift 12s ease infinite;
-    pointer-events: none;
+/* --- Верхняя панель (переключатель) --- */
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
 }
 
-@keyframes gradientShift {
-    0% {
-        transform: translate3d(0, 0, 0) scale(1);
-        background-position: 0% 50%;
-    }
-
-    50% {
-        transform: translate3d(-5%, 5%, 0) scale(1.02);
-        background-position: 100% 50%;
-    }
-
-    100% {
-        transform: translate3d(0, 0, 0) scale(1);
-        background-position: 0% 50%;
-    }
+.mode-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-gray);
+    cursor: pointer;
+    transition: color 0.2s;
 }
 
-#result,
-.buttons,
-button {
-    position: relative;
-    z-index: 1;
+.mode-toggle:hover {
+    color: var(--text-white);
+}
+
+/* --- Экран --- */
+.display-container {
+    margin-bottom: 20px;
 }
 
 #result {
     width: 100%;
-    padding: 15px;
-    font-size: 1.6em;
+    height: 70px;
+    background-color: var(--display-bg);
     border: none;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    color: var(--text-white);
+    font-size: 36px;
+    text-align: right;
+    padding: 15px;
+    outline: none;
 }
 
+/* --- Сетка кнопок --- */
 .buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin-top: 20px;
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки */
+    gap: 12px;
 }
 
-button {
-    padding: 10px;
-    font-size: 1.2em;
+/* --- Стили кнопок --- */
+.btn {
+    height: 60px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--btn-radius);
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
-    box-shadow: 2px 6px 3px rgba(0, 0, 0, 0.5);
-    transition: all 0.2s ease-in-out;
-    background: linear-gradient(45deg, #03d2ea, #002488);
+    color: var(--text-white);
+    transition: filter 0.2s, transform 0.1s;
+    user-select: none; /* Чтобы текст не выделялся при кликах */
 }
 
-button:hover {
-    transform: scale(1.1);
+.btn:active {
+    transform: scale(0.95); /* Эффект нажатия */
 }
 
-.clear {
-    background-color: #ff4136;
-    color: #fff;
+.btn:hover {
+    filter: brightness(1.2); /* Подсветка при наведении */
 }
 
-.number,
-.decimal {
-    background-color: #fff;
-    color: #ffffff;
-
+/* --- Цветовые схемы кнопок --- */
+.number {
+    background-color: var(--btn-num-bg);
 }
 
 .operator {
-    background-color: #0074d9;
-    color: #fff;
+    background-color: var(--btn-op-bg);
+    font-size: 24px;
 }
 
 .equals {
-    background-color: #01ff70;
-    grid-row: span 3;
-    color: #fff;
+    background-color: #27ae60; /* Зеленая кнопка равно */
+}
+
+.clear, .delete {
+    background-color: #636e72;
+    color: #ff7675; /* Красный текст */
+}
+
+/* --- Научные кнопки --- */
+.sci-btn {
+    background-color: var(--btn-sci-bg);
+    font-size: 16px;
+    display: none; /* Скрыты по умолчанию! */
+}
+
+/* --- Класс для расширенного режима --- */
+/* Этот класс мы будем добавлять через JS */
+.calculator.expanded {
+    width: 360px; /* Чуть шире, если нужно */
+}
+
+.calculator.expanded .sci-btn {
+    display: block; /* Показываем кнопки */
+    animation: fadeIn 0.3s; /* Анимация появления */
+}
+
+/* Анимация плавного появления */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 400px) {
+    .calculator {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 15px;
+    }
 }
