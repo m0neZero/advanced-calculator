@@ -27,6 +27,13 @@ function calculateResult() {
 }
 
 function appendToResult(value) {
+    // Запрет ввода двух операторов подряд
+    const lastChar = resultEl.value.slice(-1);
+    const operators = ["+", "-", "*", "/"];
+    
+    if (operators.includes(value) && operators.includes(lastChar)) {
+        return; 
+    }
+    
     resultEl.value += value;
 }
-
