@@ -3,32 +3,32 @@ const toggleBtn = document.getElementById("toggleMode");
 const calculatorEl = document.querySelector(".calculator");
 const buttonsContainer = document.querySelector(".buttons");
 
-// 2. СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-let isScientific = false; // Переключатель режима
+// 2. APPLICATION STATE
+let isScientific = false; // Mode toggle
 
-// 3. ОБРАБОТЧИК ПЕРЕКЛЮЧЕНИЯ РЕЖИМА
+// 3. MODE TOGGLE HANDLER
 toggleBtn.addEventListener("click", () => {
     isScientific = !isScientific;
-    // Добавляем/удаляем CSS класс для показа научных кнопок
+    // Add/remove CSS class to show scientific buttons
     calculatorEl.classList.toggle("expanded");
 
-    // Меняем иконку
+    // Change the icon
     toggleBtn.innerHTML = isScientific
         ? '<span class="material-icons">calculate</span>'
         : '<span class="material-icons">science</span>';
 });
 
-// 4. ГЛАВНЫЙ ОБРАБОТЧИК КЛИКОВ (Делегирование событий)
+// 4. MAIN CLICK HANDLER (Event delegation)
 buttonsContainer.addEventListener("click", (event) => {
     const target = event.target;
 
-    // Проверяем, что нажата именно кнопка
+    // Check if a button was clicked
     if (!target.matches("button")) return;
 
     const value = target.textContent;
-    const dataValue = target.getAttribute("data-val"); // Для сложных функций
+    const dataValue = target.getAttribute("data-val"); // For complex functions
 
-    // Логика выбора действия
+    // Action selection logic
     if (target.classList.contains("clear")) {
         clearResult();
     } else if (target.classList.contains("delete")) {
@@ -36,37 +36,37 @@ buttonsContainer.addEventListener("click", (event) => {
     } else if (target.classList.contains("equals")) {
         calculateResult();
     } else {
-        // Если у кнопки есть data-val (например, sin(), используем его, иначе текст)
+        // If the button has a data-val (e.g., sin()), use it; otherwise, use the text
         appendToResult(dataValue || value);
     }
 });
 
-// 5. ФУНКЦИИ ЛОГИКИ
+// 5. LOGIC FUNCTIONS
 
 function appendToResult(value) {
     const currentDisplay = resultEl.value;
-    const lastChar = currentDisplay.slice(-1); // Получаем последний символ
+    const lastChar = currentDisplay.slice(-1); // Get the last character
     const operators = ["+", "-", "*", "/", "%", "^"];
 
-    // 1. ЗАЩИТА ОТ ДУБЛИРОВАНИЯ ОПЕРАТОРОВ
-    // Если вводим оператор и последний символ тоже оператор — заменяем старый на новый
+    // 1. PREVENT DUPLICATE OPERATORS
+    // If an operator is entered and the last character is also an operator, replace the old one with the new one
     if (operators.includes(value) && operators.includes(lastChar)) {
         resultEl.value = currentDisplay.slice(0, -1) + value;
         return;
     }
 
-    // 2. ЗАЩИТА ОТ МНОЖЕСТВА ТОЧЕК
+    // 2. PREVENT MULTIPLE DECIMAL POINTS
     if (value === ".") {
-        // Находим последнее число в строке (всё, что после последнего оператора)
+        // Find the last number in the string (everything after the last operator)
         const parts = currentDisplay.split(/[\+\-\*\/\%\^]/);
         const lastNumber = parts[parts.length - 1];
 
-        // Если в последнем числе уже есть точка — ничего не делаем
+        // If the last number already contains a decimal point, do nothing
         if (lastNumber.includes(".")) return;
     }
 
-    // 3. ПРАВИЛО ПЕРВОГО СИМВОЛА
-    // Нельзя начинать с оператора (кроме минуса или функций)
+    // 3. FIRST CHARACTER RULE
+    // Cannot start with an operator (except minus or functions)
     if (currentDisplay === "" && ["*", "/", "%", "^", ")", "."].includes(value)) {
         return;
     }
@@ -85,7 +85,7 @@ function deleteLast() {
 function calculateResult() {
     let expression = resultEl.value;
 
-    // Заменяем человеческие символы на понятные программированию
+    // Replace human-readable symbols with programming-friendly ones
     try {
         expression = expression.replace(/sin\(/g, "Math.sin(");
         expression = expression.replace(/cos\(/g, "Math.cos(");
@@ -93,19 +93,19 @@ function calculateResult() {
         expression = expression.replace(/log\(/g, "Math.log10(");
         expression = expression.replace(/ln\(/g, "Math.log(");
         expression = expression.replace(/sqrt\(/g, "Math.sqrt(");
-        expression = expression.replace(/\^/g, "**"); // Степень в JS это **
+        expression = expression.replace(/\^/g, "**"); // Exponentiation in JS is **
 
-        // Вычисление
+        // Evaluation
         const result = new Function('return ' + expression)();
 
-        // Проверка на корректность результата (например, деление на 0)
+        // Check for valid results (e.g., division by 0)
         if (result === Infinity || isNaN(result)) {
-            resultEl.value = "Ошибка";
+            resultEl.value = "Error";
         } else {
-            // Округляем до 10 знаков, чтобы избежать проблем с плавающей точкой (0.1+0.2)
+            // Round to 10 decimal places to avoid floating-point issues (e.g., 0.1 + 0.2)
             resultEl.value = +result.toFixed(10);
         }
     } catch (error) {
-        resultEl.value = "Ошибка";
+        resultEl.value = "Error";
     }
 }
