@@ -18,7 +18,7 @@ toggleBtn.addEventListener("click", () => {
         : '<span class="material-icons">science</span>';
 });
 
-// 4. Делегирование событий
+// 4. ГЛАВНЫЙ ОБРАБОТЧИК КЛИКОВ (Делегирование событий)
 buttonsContainer.addEventListener("click", (event) => {
     const target = event.target;
 
