@@ -1,4 +1,3 @@
-// 1. ПОИСК ЭЛЕМЕНТОВ
 const resultEl = document.getElementById("result");
 const toggleBtn = document.getElementById("toggleMode");
 const calculatorEl = document.querySelector(".calculator");
@@ -13,13 +12,13 @@ toggleBtn.addEventListener("click", () => {
     // Добавляем/удаляем CSS класс для показа научных кнопок
     calculatorEl.classList.toggle("expanded");
 
-    // Меняем иконку (опционально)
+    // Меняем иконку
     toggleBtn.innerHTML = isScientific
         ? '<span class="material-icons">calculate</span>'
         : '<span class="material-icons">science</span>';
 });
 
-// 4. ГЛАВНЫЙ ОБРАБОТЧИК КЛИКОВ (Делегирование событий)
+// 4. Делегирование событий
 buttonsContainer.addEventListener("click", (event) => {
     const target = event.target;
 

@@ -78,7 +78,7 @@ body {
 /* --- Сетка кнопок --- */
 .buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 колонки */
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
 }
 
@@ -114,12 +114,12 @@ body {
 }
 
 .equals {
-    background-color: #27ae60; /* Зеленая кнопка равно */
+    background-color: #27ae60;
 }
 
 .clear, .delete {
     background-color: #636e72;
-    color: #ff7675; /* Красный текст */
+    color: #ff7675; 
 }
 
 /* --- Научные кнопки --- */
@@ -129,10 +129,9 @@ body {
     display: none; /* Скрыты по умолчанию! */
 }
 
-/* --- Класс для расширенного режима --- */
-/* Этот класс мы будем добавлять через JS */
+/* --- Класс для расширенного режима JS --- */
 .calculator.expanded {
-    width: 360px; /* Чуть шире, если нужно */
+    width: 360px;
 }
 
 .calculator.expanded .sci-btn {
